@@ -27,6 +27,11 @@ class CategoryController extends Controller
 
         $data['slug'] = Str::slug($data['name']);
 
+        if ($request->hasFile('image')) {
+            $data['image'] = $request->file('image')
+                ->store('categories', 'public');
+        }
+
         $category = Category::create($data);
 
         return response()->json($category, 201);
@@ -48,6 +53,17 @@ class CategoryController extends Controller
 
         if (isset($data['name'])) {
             $data['slug'] = Str::slug($data['name']);
+        }
+
+        if ($request->hasFile('image')) {
+
+            // delete old image
+            if ($category->image) {
+                Storage::disk('public')->delete($category->image);
+            }
+
+            $data['image'] = $request->file('image')
+                ->store('categories', 'public');
         }
 
         $category->update($data);

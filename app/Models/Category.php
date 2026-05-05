@@ -8,6 +8,15 @@ class Category extends Model
 {
     protected $fillable = ['name', 'slug', 'description', 'parent_id', 'image', 'is_active', 'position'];
 
+    protected $appends = ['image_url'];
+
+    public function getImageUrlAttribute()
+    {
+        return $this->image
+            ? asset('storage/' . $this->image)
+            : asset('images/default-category.png'); // fallback
+    }
+
     public function parent()
     {
         return $this->belongsTo(Category::class, 'parent_id');
