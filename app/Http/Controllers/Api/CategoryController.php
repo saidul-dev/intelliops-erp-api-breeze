@@ -5,16 +5,18 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class CategoryController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         return Category::with('children')
             ->whereNull('parent_id')
             ->orderBy('position')
-            ->get();
+            ->paginate($request->get('per_page', 10));
     }
 
     public function store(Request $request)
@@ -73,7 +75,16 @@ class CategoryController extends Controller
 
     public function destroy(Category $category)
     {
-        $category->delete();
+        DB::transaction(function () use ($category) {
+
+            $image = $category->image;
+
+            $category->delete();
+
+            if ($image) {
+                Storage::disk('public')->delete($image);
+            }
+        });
 
         return response()->json([
             'message' => 'Category deleted successfully'

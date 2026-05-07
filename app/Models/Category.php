@@ -14,7 +14,7 @@ class Category extends Model
     {
         return $this->image
             ? asset('storage/' . $this->image)
-            : asset('images/default-category.png'); // fallback
+            : asset('default.png'); // fallback
     }
 
     public function parent()
