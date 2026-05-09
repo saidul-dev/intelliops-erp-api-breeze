@@ -15,6 +15,12 @@ class CategoryController extends Controller
     {
         return Category::with('children')
             ->whereNull('parent_id')
+            ->when($request->has('search'), function ($query) use ($request) {
+                $query->where('name', 'like', '%' . $request->get('search') . '%');
+            })
+            ->when($request->has('is_active'), function ($query) use ($request) {
+                $query->where('is_active', $request->get('is_active'));
+            })
             ->orderBy('position')
             ->paginate($request->get('per_page', 10));
     }
