@@ -10,9 +10,10 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
-        return User::when($request->has('search'), function ($query) use ($request) {
-            $query->where('name', 'like', '%' . $request->get('search') . '%');
-        })
+        return User::with('roles')
+            ->when($request->has('search'), function ($query) use ($request) {
+                $query->where('name', 'like', '%' . $request->get('search') . '%');
+            })
             ->when($request->has('status'), function ($query) use ($request) {
                 $query->where('status', $request->get('status'));
             })
