@@ -28,6 +28,7 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:6',
+            'status' => 'required|string|in:active,inactive',
             'roles' => 'array|required',
             'roles.*' => 'exists:roles,id',
             'image' => 'nullable|image|max:2048'
@@ -59,6 +60,7 @@ class UserController extends Controller
             'name' => 'string|max:255',
             'email' => 'email|unique:users,email,' . $user->id,
             'password' => 'string|min:6',
+            'status' => 'string|in:active,inactive',
             'roles' => 'array',
             'roles.*' => 'exists:roles,id',
             'image' => 'nullable|image|max:2048'
