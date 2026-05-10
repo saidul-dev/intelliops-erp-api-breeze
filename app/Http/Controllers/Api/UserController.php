@@ -76,6 +76,10 @@ class UserController extends Controller
 
         $user->update($data);
 
+        if (isset($data['roles'])) {
+            $user->roles()->sync($data['roles']);
+        }
+
         $user->load('roles');
 
         return response()->json($user);
