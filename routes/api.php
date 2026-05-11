@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\SiteSettingController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -33,4 +34,5 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::apiResource('users', UserController::class);
     Route::apiResource('categories', CategoryController::class);
+    Route::apiResource('site-settings', SiteSettingController::class)->only(['index', 'store']);
 });
